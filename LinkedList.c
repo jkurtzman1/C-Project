@@ -4,11 +4,29 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 struct node{
     int data;
     struct node *next;
 };
+
+struct node *newNode(int data)
+{
+    //Allocate the memory and returns pointer to memory
+    struct node *createdNode = malloc(sizeof(struct node));
+    //Ensure we successfully malloc-ed the node
+    if(createdNode == NULL)
+    {
+        printf("ERROR MALLOC-ING NODE");
+        exit(-1);
+    }
+
+    //If we successfuly made the node:
+    createdNode->data = data;
+    createdNode->next = NULL;
+    return createdNode;
+}
 
 void printList(struct node *head)
 {
@@ -34,16 +52,21 @@ void appendNode(struct node *head, struct node *nodeToAdd)
 
 int main()
 {
-    struct node node1 = {1, NULL};
-    printList(&node1);
-    struct node node2 = {2, NULL};
-    appendNode(&node1, &node2);
-    printList(&node1);
-    struct node node3 = {3, NULL};
-    appendNode(&node1, &node3);
-    printList(&node1);
-    struct node node4 = {4, NULL};
-    appendNode(&node1, &node4);
-    printList(&node1);
+    struct node *node1 = newNode(1);
+    struct node *node2 = newNode(2);
+    struct node *node3 = newNode(3);
+    node1->next = node2;
+    node2->next = node3;
+    printList(node1);
+    struct node *node4 = newNode(4);
+    appendNode(node1, node4);
+    printList(node1);
+
+
+    free(node1);
+    free(node2);
+    free(node3);
+    free(node4);
+
     return 0;
 }
