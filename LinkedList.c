@@ -61,6 +61,28 @@ void addAtPosition(struct node *nodeToAddAfter, struct node *nodeToAdd)
     nodeToAddAfter->next = nodeToAdd;
 }
 
+//Delete node from list
+//Need to take double pointer for head to change head outside of main when deleting head node.
+void deleteNode(struct node **head, struct node *nodeToDelete)
+{
+    struct node *dummyHead = *head;
+    if(nodeToDelete == dummyHead)
+    {
+        *head = dummyHead->next;
+    }else if(nodeToDelete->next == NULL) //End of list
+    {
+
+    }else   //Middle of list
+    {
+        while(dummyHead->next != nodeToDelete)
+        {
+            dummyHead = dummyHead -> next;
+        }
+        dummyHead->next = dummyHead->next->next;
+    }
+    free(nodeToDelete);
+}
+
 //Return a node's memory address
 struct node *findNode(struct node *head, int toFind)
 {
@@ -96,7 +118,6 @@ void freeList(struct node *head)
         prev_node = head;
     }
     free(head);
-    //free(prev_node); //<- Causes double free() exception
 }
 
 int main()
@@ -138,6 +159,13 @@ int main()
     addAtHead(&head, newHeadNode);
     printf("\n---------------\n");
     printList(head);
+
+    printf("\n---------------\n");
+    deleteNode(&head, findNode(head, 6));
+    deleteNode(&head, head);
+    deleteNode(&head, findNode(head, 9));
+    printList(head);
+
     freeList(head);
 
     return 0;
