@@ -30,12 +30,13 @@ struct node *newNode(int data)
 
 void printList(struct node *head)
 {
-    while(head -> next != NULL)
+    struct node *dummyHead = head;
+    while(dummyHead -> next != NULL)
     {
-        printf("%d -> ", head->data);
-        head = head->next;
+        printf("%d -> ", dummyHead->data);
+        dummyHead = dummyHead->next;
     }
-    printf("%d\n", head->data);
+    printf("%d\n", dummyHead->data);
 }
 
 // Add node to end of list
@@ -43,13 +44,13 @@ void printList(struct node *head)
 // O(n)
 void appendNode(struct node *head, struct node *nodeToAdd)
 {
-    //printf("\tDATA::%d\n", nodeToAdd->data);
-    while(head->next != NULL)
+    struct node *dummyHead = head;
+    while(dummyHead->next != NULL)
     {
-        head = head -> next;
+        dummyHead = dummyHead -> next;
     }
 
-    head -> next = nodeToAdd;
+    dummyHead -> next = nodeToAdd;
     nodeToAdd -> next = NULL;
 }
 
@@ -63,16 +64,25 @@ void addAtPosition(struct node *nodeToAddAfter, struct node *nodeToAdd)
 //Return a node's memory address
 struct node *findNode(struct node *head, int toFind)
 {
-    while(head->next != NULL)
+    struct node *dummyHead = head;
+    while(dummyHead->next != NULL)
     {
-        if(head->data == toFind)
+        if(dummyHead->data == toFind)
         {
-            return head;
+            return dummyHead;
         }
-        head = head->next;
+        dummyHead = dummyHead->next;
     }
     printf("ERR:COULD NOT FIND NODE");
     return NULL;
+}
+
+//Insert at head
+//Takes head as double pointer so we can change the stored heads pointer in main through the use of this method rather than manually
+void addAtHead(struct node **head, struct node *nodeToAdd)
+{
+    nodeToAdd -> next = *head;
+    *head = nodeToAdd;
 }
 
 // Free the whole list at the end of the life of the list
@@ -124,6 +134,10 @@ int main()
     addAtPosition(findNode(head, 22), toAdd);
     printList(head);
 
+    struct node *newHeadNode = newNode(256);
+    addAtHead(&head, newHeadNode);
+    printf("\n---------------\n");
+    printList(head);
     freeList(head);
 
     return 0;
