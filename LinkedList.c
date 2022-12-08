@@ -66,19 +66,25 @@ void addAtPosition(struct node *nodeToAddAfter, struct node *nodeToAdd)
 void deleteNode(struct node **head, struct node *nodeToDelete)
 {
     struct node *dummyHead = *head;
-    if(nodeToDelete == dummyHead)
+    if(nodeToDelete == dummyHead) //Deleting head, so change head pointer
     {
         *head = dummyHead->next;
-    }else if(nodeToDelete->next == NULL) //End of list
+    }else   //Middle or end of list
     {
-
-    }else   //Middle of list
-    {
+        //Traverse the Linked List
         while(dummyHead->next != nodeToDelete)
         {
             dummyHead = dummyHead -> next;
         }
-        dummyHead->next = dummyHead->next->next;
+
+        //If we are deleting at end:
+        if(nodeToDelete->next == NULL)
+        {
+            dummyHead->next = NULL;
+        }else //If we are deleting in middle:
+        {
+            dummyHead->next = dummyHead->next->next;
+        }
     }
     free(nodeToDelete);
 }
@@ -87,7 +93,7 @@ void deleteNode(struct node **head, struct node *nodeToDelete)
 struct node *findNode(struct node *head, int toFind)
 {
     struct node *dummyHead = head;
-    while(dummyHead->next != NULL)
+    while(dummyHead != NULL)
     {
         if(dummyHead->data == toFind)
         {
@@ -95,7 +101,6 @@ struct node *findNode(struct node *head, int toFind)
         }
         dummyHead = dummyHead->next;
     }
-    printf("ERR:COULD NOT FIND NODE");
     return NULL;
 }
 
@@ -141,18 +146,18 @@ int main()
 
     struct node *head = newNode(0);
     struct node *tmp = NULL;
-    for(int i = 1; i < 25; i++)
+    for(int i = 1; i < 11; i++)
     {
         tmp = newNode(i);
         appendNode(head, tmp);
         //free(tmp);
     }
-    printf("%p\n", findNode(head, 22));
+    printf("%p\n", findNode(head, 10));
 
     printList(head);
     printf("\n---------------\n");
     struct node *toAdd = newNode(255);
-    addAtPosition(findNode(head, 22), toAdd);
+    addAtPosition(findNode(head, 2), toAdd);
     printList(head);
 
     struct node *newHeadNode = newNode(256);
@@ -165,6 +170,11 @@ int main()
     deleteNode(&head, head);
     deleteNode(&head, findNode(head, 9));
     printList(head);
+
+    printf("\n---------------\n");
+    deleteNode(&head, findNode(head, 10));
+    printList(head);
+
 
     freeList(head);
 
