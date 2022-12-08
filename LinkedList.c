@@ -39,6 +39,8 @@ void printList(struct node *head)
 }
 
 // Add node to end of list
+// Use when you don't know the last node of the list
+// O(n)
 void appendNode(struct node *head, struct node *nodeToAdd)
 {
     //printf("\tDATA::%d\n", nodeToAdd->data);
@@ -49,6 +51,28 @@ void appendNode(struct node *head, struct node *nodeToAdd)
 
     head -> next = nodeToAdd;
     nodeToAdd -> next = NULL;
+}
+
+// Add node at after a given node
+void addAtPosition(struct node *nodeToAddAfter, struct node *nodeToAdd)
+{
+    nodeToAdd->next = nodeToAddAfter->next;
+    nodeToAddAfter->next = nodeToAdd;
+}
+
+//Return a node's memory address
+struct node *findNode(struct node *head, int toFind)
+{
+    while(head->next != NULL)
+    {
+        if(head->data == toFind)
+        {
+            return head;
+        }
+        head = head->next;
+    }
+    printf("ERR:COULD NOT FIND NODE");
+    return NULL;
 }
 
 // Free the whole list at the end of the life of the list
@@ -92,7 +116,12 @@ int main()
         appendNode(head, tmp);
         //free(tmp);
     }
+    printf("%p\n", findNode(head, 22));
 
+    printList(head);
+    printf("\n---------------\n");
+    struct node *toAdd = newNode(255);
+    addAtPosition(findNode(head, 22), toAdd);
     printList(head);
 
     freeList(head);
